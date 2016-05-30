@@ -13,7 +13,6 @@ Task list
 	// 		Start a WebPack dev server that listens to file changes and
 	// 		rebuilds the pack. To run 
 	// 		$ npm install
-	//		$ npm install gulp -g 
 	// 		$ gulp build-dev
 	//
 	// 		To launch make any change to app/ folder (spacing etc) and save
