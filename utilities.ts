@@ -1,5 +1,6 @@
 const os = require("os");
 const dns = require("dns");
+const arp = require("arpjs");
 const portscanner = require("portscanner");
 
 import config from "./config";
@@ -13,15 +14,17 @@ export async function getLocalAddress() {
     });
 }
 
-export async function portScanner(addresses) {
+export async function scanPorts() {
     let localAddress = await getLocalAddress();
     return await new Promise((resolve, reject) => {
-        for (let address of addresses) {
-            portscanner.checkPortStatus(config.port, address, (error, status) => {
-                if (error) reject(error);
-                if (address !== localAddress && status !== "closed") resolve(address);
-            });
-        }
-        resolve(null);
+        arp.table((error, devices) => {
+            for (let device of devices) {
+                portscanner.checkPortStatus(config.port, device.ip, (error, status) => {
+                    if (error) reject(error);
+                    if (device.ip !== localAddress && status !== "closed") resolve(device.ip);
+                });
+            }
+            resolve(null);
+        });
     });
 }
