@@ -7,10 +7,8 @@ const arp = require("arpjs");
 const primus = require("primus");
 const portscanner = require("portscanner");
 
-const config = {
-    ip: getUserIPAddress(),
-    port: 1234
-};
+import config from "./config";
+import {getLocalAddress} from "./utilities";
 
 // Step 1: Get list of connected IP addresses
 async function server() {
@@ -33,7 +31,7 @@ async function server() {
             if (address) {
                 // Server exists on one of the IP addresses
                 // Step 5B: Compare IP addresses
-                if (ip.toLong(config.ip) > ip.toLong(address)) {
+                if (ip.toLong(getLocalAddress()) > ip.toLong(address)) {
                     // TODO: Destroy created server and repeat whole process
                 }
             }
@@ -41,17 +39,11 @@ async function server() {
     });
 }
 
-async function getUserIPAddress() {
-    let ip = null;
-    await dns.lookup(os.hostname(), (err, add, fam) => ip = add);
-    return ip;
-}
-
 async function scanPorts(devices) {
     let ip = null;
     for (let device of devices) {
         await portscanner.checkPortStatus(config.port, device.ip, (error, status) => {
-            if (device.ip !== config.ip && status !== "closed") ip = device.ip;
+            if (device.ip !== getLocalAddress() && status !== "closed") ip = device.ip;
         });
     }
     return ip;
