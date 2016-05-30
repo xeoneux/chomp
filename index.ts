@@ -2,10 +2,9 @@
 
 const os = require("os");
 const ip = require("ip");
-const ws = require("ws");
 const dns = require("dns");
 const arp = require("arpjs");
-const http = require("http");
+const primus = require("primus");
 const portscanner = require("portscanner");
 
 const config = {
@@ -21,14 +20,12 @@ async function server() {
         if (address) {
             // Server exists on one of the IP addresses
             // Step 3A: Connect to the server.
-            const wsc = new ws(`ws://${address}`);
         } else {
             // Server does not exists on one of the connected IP addresses
             // Step 3B: Create a server.
-            const server = http.createServer();
-            const wss = new ws.Server({server});
-            server.listen(config.port, () => {
-                console.log(`Listening on ${server.address().port}`);
+            const server = primus.createServer({
+                port: config.port,
+                transformer: "uws"
             });
 
             // Step 4B: Check ports again after server creation
@@ -52,11 +49,11 @@ async function getUserIPAddress() {
 
 async function scanPorts(devices) {
     let ip = null;
-    await devices.forEach(async(device) => {
+    for (let device of devices) {
         await portscanner.checkPortStatus(config.port, device.ip, (error, status) => {
             if (device.ip !== config.ip && status !== "closed") ip = device.ip;
         });
-    });
+    }
     return ip;
 }
 
