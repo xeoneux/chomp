@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Bookmarking App </title>
+  <link rel="stylesheet" href="static/semantic/dist/semantic.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <style>
+    .elec-draggable{
+      z-index: -1;
+      width:100%;
+      height:100%;
+      -webkit-app-region: drag;
+    }
+    
+    * {
+       -webkit-user-select: none;
+    }
+    
+     a,button,input,select,img,p,i,b,
+     div .button{
+       -webkit-app-region: no-drag;
+    }
+    </style>
+</head>
+
+<body>
+  <app></app>
+  <script>window.$ = window.jQuery = require('jquery')</script>
+  <script src="static/semantic/dist/semantic.min.js"></script>
+  <script src="dist/build.js"></script>
+</body>
+
+</html>
