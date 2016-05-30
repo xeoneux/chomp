@@ -1,14 +1,13 @@
 # chomp electron app
 
-////////////////////////////////////////////////////////
-// A File Sharing app supporting 
-// multiple protocols and platforms (MacOSx,x32,x64) 
-/////////////////////////////////////////////////////////
+
+## A File Sharing app supporting multiple protocols and platforms (MacOSx,x32,x64) 
+
 
 ///////////////////////////////////////////////////////////////
-// Dev Server Gulp Tasks 
+# Dev Server Gulp Tasks 
 // ----------------------- 
-// Task list
+## Task list
 // ----------------------- 
 // build-dev :
 // 		Start a WebPack dev server that listens to file changes and
