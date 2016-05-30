@@ -1,6 +1,6 @@
 # Chomp Electron App
 
-### A File Sharing app supporting multiple protocols and platforms (OSX,x32,x64) 
+#### A File Sharing app supporting multiple protocols and platforms (OSX/x64) 
 
 
 Dev Server Gulp Tasks 
