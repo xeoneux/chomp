@@ -1,7 +1,10 @@
-import {app, BrowserWindow} from "electron";
+import {app, BrowserWindow, ipcMain} from "electron";
+
+import config from "./config";
 import server from "./server";
 
 let win;
+let serverAddress;
 
 function createWindow() {
     win = new BrowserWindow({width: 800, height: 600, frame: false});
@@ -14,11 +17,10 @@ function createWindow() {
 
 app.on("ready", async() => {
     createWindow();
-    server()
-        .then((address) => {
-            console.log(address);
-            win.loadURL(`file://${__dirname}/../src/client/index.html`);
-        });
+    server().then((address) => {
+        serverAddress = address;
+        win.loadURL(`file://${__dirname}/../src/client/index.html`);
+    });
 });
 
 app.on("window-all-closed", () => {
@@ -31,4 +33,8 @@ app.on("activate", () => {
     if (win === null) {
         createWindow();
     }
+});
+
+ipcMain.on("url", (event) => {
+    event.returnValue = `ws://${serverAddress}:${config.port}`;
 });
