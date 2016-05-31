@@ -2,5 +2,8 @@
   "globalDependencies": {
     "electron": "registry:env/electron#0.37.6+20160416165306",
     "node": "registry:dt/node#6.0.0+20160524002506"
+  },
+  "dependencies": {
+    "primus": "registry:npm/primus#4.0.0+20160312192808"
   }
 }

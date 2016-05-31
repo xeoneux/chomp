@@ -1,4 +1,5 @@
 import {app, BrowserWindow} from "electron";
+import server from "./server";
 
 let win;
 
@@ -10,7 +11,10 @@ function createWindow() {
     });
 }
 
-app.on("ready", createWindow);
+app.on("ready", () => {
+    let url = server();
+    createWindow();
+});
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
