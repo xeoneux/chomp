@@ -23,13 +23,14 @@ function getPortStatus(port, target) {
         let options = {port, target};
         let scanner = new evilscan(options);
         scanner.on("result", function (result) {
-            status = result;
+            status = result.status;
         });
         scanner.on("error", function (error) {
             reject(error);
         });
         scanner.on("done", function () {
-            resolve(status);
+            if (status) resolve(status);
+            else resolve("closed");
         });
         scanner.run();
     });
