@@ -5,7 +5,12 @@ const portscanner = require("portscanner");
 
 import config from "./config";
 
-function getARPTable() {
+interface IARP {
+    ip: string;
+    mac: string;
+}
+
+function getARPTable(): Promise<IARP[]> {
     return new Promise((resolve, reject) => {
         arp.table((error, devices) => {
             if (error) reject(error);
@@ -33,7 +38,17 @@ export function getLocalAddress() {
 }
 
 export async function scanPorts() {
+    let port = config.port;
     let devices = await getARPTable();
     let localAddress = await getLocalAddress();
-    // TODO: Return address with open port
+
+    let serverAddress;
+    for (let device of devices) {
+        let address = device.ip;
+        let status = await getPortStatus(port, address);
+        if (status === "open") {
+            serverAddress = address;
+        }
+    }
+    return serverAddress;
 }
