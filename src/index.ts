@@ -5,6 +5,7 @@ let win;
 
 function createWindow() {
     win = new BrowserWindow({width: 800, height: 600, frame: false});
+    win.loadURL(`file://${__dirname}/../src/client/load.html`);
     win.webContents.openDevTools();
     win.on("closed", () => {
         win = null;
