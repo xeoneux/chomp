@@ -13,6 +13,7 @@ export default async function server() {
             port: config.port,
             transformer: "uws"
         });
+        registerServerMethods(server);
         server.save(`${__dirname}/../client/primus.js`);
         let serverAddress = await scanPorts();
         if (serverAddress) {
@@ -22,3 +23,10 @@ export default async function server() {
         } else resolve(localAddress);
     });
 };
+
+function registerServerMethods(server) {
+    server.on("connection", (spark) => {
+        spark.write("Hello from the server");
+        console.log("New connection from:", spark.id);
+    });
+}
