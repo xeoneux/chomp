@@ -11,8 +11,8 @@ function createWindow() {
     });
 }
 
-app.on("ready", () => {
-    let url = server();
+app.on("ready", async() => {
+    let url = await server();
     createWindow();
 });
 

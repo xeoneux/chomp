@@ -5,26 +5,35 @@ const portscanner = require("portscanner");
 
 import config from "./config";
 
-export async function getLocalAddress() {
-    return await new Promise((resolve, reject) => {
-        dns.lookup(os.hostname(), (err, add) => {
-            if (err) reject(err);
-            else resolve(add);
+function getARPTable() {
+    return new Promise((resolve, reject) => {
+        arp.table((error, devices) => {
+            if (error) reject(error);
+            else resolve(devices);
+        });
+    });
+}
+
+function getPortStatus(port, address) {
+    return new Promise((resolve, reject) => {
+        portscanner.checkPortStatus(port, address, (error, status) => {
+            if (error) reject(error);
+            else resolve(status);
+        });
+    });
+}
+
+export function getLocalAddress() {
+    return new Promise((resolve, reject) => {
+        dns.lookup(os.hostname(), (error, address) => {
+            if (error) reject(error);
+            else resolve(address);
         });
     });
 }
 
 export async function scanPorts() {
+    let devices = await getARPTable();
     let localAddress = await getLocalAddress();
-    return await new Promise((resolve, reject) => {
-        arp.table((error, devices) => {
-            for (let device of devices) {
-                portscanner.checkPortStatus(config.port, device.ip, (error, status) => {
-                    if (error) reject(error);
-                    if (device.ip !== localAddress && status !== "closed") resolve(device.ip);
-                });
-            }
-            resolve(null);
-        });
-    });
+    // TODO: Return address with open port
 }
