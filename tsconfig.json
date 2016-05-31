@@ -1,9 +1,14 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "sourceMap": true
-    },
-    "exclude": [
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "noImplicitAny": false,
+    "removeComments": true,
+
+    "outDir": "dist",
+    "sourceMap": false
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
