@@ -29,14 +29,11 @@ function getPortStatus(port, address) {
 export async function scanPorts() {
     let {port, address} = config;
     let devices = await getARPTable();
-
-    let serverAddress;
     for (let device of devices) {
-        let address = device.ip;
-        let status = await getPortStatus(port, address);
-        if (status === "open") {
-            serverAddress = address;
+        console.log(device.ip);
+        let status = await getPortStatus(port, device.ip);
+        if (status === "open" && device.ip !== address) {
+            return device.ip;
         }
     }
-    return serverAddress;
 }
