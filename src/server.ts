@@ -2,10 +2,10 @@ const ip = require("ip");
 const primus = require("primus");
 
 import config from "./config";
-import {scanPorts, getLocalAddress} from "./utilities";
+import {scanPorts} from "./utilities";
 
 export default async function server() {
-    let localAddress = await getLocalAddress();
+    let localAddress = config.address;
     let serverAddress = await scanPorts();
     return await new Promise(async(resolve, reject) => {
         if (serverAddress) resolve(serverAddress);

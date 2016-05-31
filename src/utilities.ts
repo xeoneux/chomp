@@ -1,5 +1,3 @@
-const os = require("os");
-const dns = require("dns");
 const arp = require("arpjs");
 const portscanner = require("portscanner");
 
@@ -28,19 +26,9 @@ function getPortStatus(port, address) {
     });
 }
 
-export function getLocalAddress() {
-    return new Promise((resolve, reject) => {
-        dns.lookup(os.hostname(), (error, address) => {
-            if (error) reject(error);
-            else resolve(address);
-        });
-    });
-}
-
 export async function scanPorts() {
-    let port = config.port;
+    let {port, address} = config;
     let devices = await getARPTable();
-    let localAddress = await getLocalAddress();
 
     let serverAddress;
     for (let device of devices) {
