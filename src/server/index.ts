@@ -13,7 +13,7 @@ export default async function server() {
             port: config.port,
             transformer: "uws"
         });
-        server.save(`${__dirname}/primus.js`);
+        server.save(`${__dirname}/../primus.js`);
         let serverAddress = await scanPorts();
         if (serverAddress) {
             if (ip.toLong(localAddress) > ip.toLong(serverAddress)) {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "typings install",
-    "prestart": "tsc",
+    "prestart": "rimraf dist && tsc",
     "start": "electron dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
+    "rimraf": "^2.5.2",
     "typescript": "^1.8.10"
   }
 }
