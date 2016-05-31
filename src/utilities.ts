@@ -1,5 +1,5 @@
 const arp = require("arpjs");
-const portscanner = require("portscanner");
+const evilscan = require("evilscan");
 
 import config from "./config";
 
@@ -17,12 +17,21 @@ function getARPTable(): Promise<IARP[]> {
     });
 }
 
-function getPortStatus(port, address) {
+function getPortStatus(port, target) {
     return new Promise((resolve, reject) => {
-        portscanner.checkPortStatus(port, address, (error, status) => {
-            if (error) reject(error);
-            else resolve(status);
+        let status;
+        let options = {port, target};
+        let scanner = new evilscan(options);
+        scanner.on("result", function (result) {
+            status = result;
         });
+        scanner.on("error", function (error) {
+            reject(error);
+        });
+        scanner.on("done", function () {
+            resolve(status);
+        });
+        scanner.run();
     });
 }
 
@@ -30,7 +39,6 @@ export async function scanPorts() {
     let {port, address} = config;
     let devices = await getARPTable();
     for (let device of devices) {
-        console.log(device.ip);
         let status = await getPortStatus(port, device.ip);
         if (status === "open" && device.ip !== address) {
             return device.ip;
