@@ -1,8 +1,8 @@
 const ip = require("ip");
 const primus = require("primus");
 
-import config from "./config";
-import {scanPorts} from "./utilities";
+import config from "../config";
+import {scanPorts} from "../utilities";
 
 export default async function server() {
     let localAddress = config.address;
