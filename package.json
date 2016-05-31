@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && electron ./dist/",
+    "postinstall": "typings install",
+    "prestart": "tsc",
+    "start": "electron dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
