@@ -1,10 +1,10 @@
-declare const Primus;
+const io = require("socket.io-client");
 
 import {ipcRenderer} from "electron";
 
 let url = ipcRenderer.sendSync("url");
-let primus = Primus.connect(url);
+let socket = io(url);
 
-primus.on("data", (data) => {
+socket.on("hello", function (data) {
     console.log(data);
 });

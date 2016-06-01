@@ -12,6 +12,7 @@ export default async function server() {
     else return new Promise(async(resolve, reject) => {
         let io = socket();
         io.listen(config.port);
+        registerServerMethods(io);
         // Check for server again...
         let serverAddress = await scanPorts();
         if (serverAddress) {
@@ -22,3 +23,9 @@ export default async function server() {
         } else resolve(localAddress);
     });
 };
+
+function registerServerMethods(io) {
+    io.on("connection", (socket) => {
+        socket.emit("hello", "Hello World!");
+    });
+}
