@@ -17,32 +17,40 @@ function getARPTable(): Promise<IARP[]> {
     });
 }
 
-function getPortStatus(port, target) {
+function getPortStatus(device) {
     return new Promise((resolve, reject) => {
-        let status;
+        let info;
+        let port = config.port;
+        let target = device.ip;
         let options = {port, target};
         let scanner = new evilscan(options);
         scanner.on("result", function (result) {
-            status = result.status;
+            info = result;
         });
         scanner.on("error", function (error) {
             reject(error);
         });
         scanner.on("done", function () {
-            if (status) resolve(status);
-            else resolve("closed");
+            if (info) resolve(info);
+            else resolve(null);
         });
         scanner.run();
     });
 }
 
 export async function scanPorts() {
-    let {port, address} = config;
+    let states = null;
+    let address = config.address;
     let devices = await getARPTable();
-    for (let device of devices) {
-        let status = await getPortStatus(port, device.ip);
-        if (status === "open" && device.ip !== address) {
-            return device.ip;
-        }
+    await Promise
+        .all(devices.map((device) => {
+            return getPortStatus(device);
+        }))
+        .then((result) => states = result);
+    for (let state of states) {
+        if (state &&
+            state.ip !== address &&
+            state.status === "open")
+            return state.ip;
     }
 }
