@@ -6,12 +6,12 @@ import config from "../config";
 import {scanPorts} from "../utilities";
 
 export default async function server() {
-    debug("server")("init");
+    let log = debug("chomp:server");
     let localAddress = config.address;
     let serverAddress = await scanPorts();
     if (serverAddress) return serverAddress;
     else return new Promise(async(resolve, reject) => {
-        debug("server")("create socket.io server");
+        log("socket.io");
         let io = socket();
         io.listen(config.port);
         registerServerMethods(io);

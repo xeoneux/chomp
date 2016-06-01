@@ -1,7 +1,10 @@
 const arp = require("arpjs");
+const debug = require("debug");
 const evilscan = require("evilscan");
 
 import config from "./config";
+
+let log = debug("chomp:utilities");
 
 interface IARP {
     ip: string;
@@ -39,6 +42,7 @@ function getPortStatus(device) {
 }
 
 export async function scanPorts() {
+    log("scan ports");
     let states = null;
     let address = config.address;
     let devices = await getARPTable();

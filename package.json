@@ -2,11 +2,11 @@
   "name": "chomp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "postinstall": "typings install",
     "prestart": "rimraf dist && tsc",
-    "start": "electron dist",
+    "start": "electron dist/main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

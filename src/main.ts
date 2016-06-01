@@ -1,3 +1,5 @@
+const debug = require("debug");
+
 import {app, BrowserWindow, ipcMain} from "electron";
 
 import config from "./config";
@@ -5,6 +7,7 @@ import server from "./server";
 
 let win;
 let serverAddress;
+let log = debug("chomp:main");
 
 function createWindow() {
     win = new BrowserWindow({width: 800, height: 600, frame: false});
@@ -17,6 +20,7 @@ function createWindow() {
 
 app.on("ready", async() => {
     createWindow();
+    log("server init");
     server().then((address) => {
         serverAddress = address;
         win.loadURL(`file://${__dirname}/../src/client/index.html`);
