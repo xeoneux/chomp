@@ -2,9 +2,8 @@
   "globalDependencies": {
     "electron": "registry:env/electron#0.37.6+20160416165306",
     "ip": "registry:dt/ip#0.0.0+20160316155526",
-    "node": "registry:dt/node#6.0.0+20160524002506"
-  },
-  "dependencies": {
-    "primus": "registry:npm/primus#4.0.0+20160312192808"
+    "node": "registry:dt/node#6.0.0+20160524002506",
+    "socket.io": "registry:dt/socket.io#1.4.4+20160317120654",
+    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"
   }
 }
