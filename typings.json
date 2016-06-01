@@ -1,5 +1,6 @@
 {
   "globalDependencies": {
+    "debug": "registry:dt/debug#0.0.0+20160317120654",
     "electron": "registry:env/electron#0.37.6+20160416165306",
     "ip": "registry:dt/ip#0.0.0+20160316155526",
     "node": "registry:dt/node#6.0.0+20160524002506",
