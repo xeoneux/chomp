@@ -1,3 +1,4 @@
+const debug = require("debug");
 const dragDrop = require("drag-drop");
 const io = require("socket.io-client");
 const WebTorrent = require("webtorrent");
@@ -7,6 +8,7 @@ import {ipcRenderer} from "electron";
 let url = ipcRenderer.sendSync("url");
 let socket = io(url);
 let client = new WebTorrent();
+let log = debug("chomp:client");
 
 socket.on("hello", (data) => {
     console.log(data);
@@ -14,7 +16,7 @@ socket.on("hello", (data) => {
 
 socket.on("download", (magnet) => {
     client.add(magnet, (torrent) => {
-        console.log("Client is downloading:", torrent.infoHash);
+        log("download", torrent.infoHash);
         torrent.files.forEach((file) => {
             file.appendTo("body");
         });
@@ -23,6 +25,7 @@ socket.on("download", (magnet) => {
 
 dragDrop("body", (files) => {
     client.seed(files, (torrent) => {
-        console.log("Client is seeding:", torrent.infoHash);
+        log("upload", torrent.infoHash);
+        socket.emit("upload", torrent.magnetURI);
     });
 });

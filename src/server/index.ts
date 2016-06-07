@@ -27,7 +27,12 @@ export default async function server() {
 };
 
 function registerServerMethods(io) {
+    let log = debug("chomp:socket");
     io.on("connection", (socket) => {
         socket.emit("hello", "Hello World!");
+        socket.on("upload", (magnet) => {
+            log("broadcast magnet");
+            socket.emit("download", magnet);
+        });
     });
 }
