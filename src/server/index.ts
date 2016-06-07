@@ -34,5 +34,9 @@ function registerServerMethods(io) {
             log("broadcast magnet");
             socket.emit("download", magnet);
         });
+        socket.on("send-clients", () => {
+            let clients = io.sockets.clients();
+            socket.emit("receive-clients", clients);
+        });
     });
 }

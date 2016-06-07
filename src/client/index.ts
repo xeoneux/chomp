@@ -11,7 +11,7 @@ let client = new WebTorrent();
 let log = debug("chomp:client");
 
 socket.on("hello", (data) => {
-    console.log(data);
+    socket.emit("send-clients");
 });
 
 socket.on("download", (magnet) => {
@@ -21,6 +21,10 @@ socket.on("download", (magnet) => {
             file.appendTo("body");
         });
     });
+});
+
+socket.on("receive-clients", (clients) => {
+    console.log(clients);
 });
 
 dragDrop("body", (files) => {
