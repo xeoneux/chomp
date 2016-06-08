@@ -23,6 +23,7 @@ app.on("ready", async() => {
     log("server init");
     server().then((address) => {
         serverAddress = address;
+        log(`websocket address: ${serverAddress}`);
         win.loadURL(`file://${__dirname}/../src/client/index.html`);
     });
 });

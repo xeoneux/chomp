@@ -7,11 +7,11 @@ import config from "./config";
 let log = debug("chomp:utilities");
 
 interface IARP {
-    ip: string;
-    mac: string;
+    ip:string;
+    mac:string;
 }
 
-function getARPTable(): Promise<IARP[]> {
+function getARPTable():Promise<IARP[]> {
     return new Promise((resolve, reject) => {
         arp.table((error, devices) => {
             if (error) reject(error);
@@ -46,15 +46,19 @@ export async function scanPorts() {
     let states = null;
     let address = config.address;
     let devices = await getARPTable();
+
     await Promise
         .all(devices.map((device) => {
             return getPortStatus(device);
         }))
         .then((result) => states = result);
+
     for (let state of states) {
         if (state &&
             state.ip !== address &&
             state.status === "open")
             return state.ip;
     }
+
+    log("no server found");
 }

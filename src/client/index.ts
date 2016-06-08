@@ -5,10 +5,12 @@ const WebTorrent = require("webtorrent");
 
 import {ipcRenderer} from "electron";
 
+let log = debug("chomp:client");
 let url = ipcRenderer.sendSync("url");
+log(`websocket url: ${url}`);
+
 let socket = io(url);
 let client = new WebTorrent();
-let log = debug("chomp:client");
 
 socket.on("hello", (data) => {
     socket.emit("send-clients");

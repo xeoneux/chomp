@@ -7,23 +7,34 @@ import {scanPorts} from "../utilities";
 
 export default async function server() {
     let log = debug("chomp:server");
+
     let localAddress = config.address;
+    log(`local address: ${localAddress}`);
+
     let serverAddress = await scanPorts();
-    if (serverAddress) return serverAddress;
-    else return new Promise(async(resolve, reject) => {
-        log("socket.io");
-        let io = socket();
-        io.listen(config.port);
-        registerServerMethods(io);
-        debug("server")("check for existing server");
-        let serverAddress = await scanPorts();
-        if (serverAddress) {
-            if (ip.toLong(localAddress) > ip.toLong(serverAddress)) {
-                server();
-                io.close();
-            }
-        } else resolve(localAddress);
-    });
+
+    if (serverAddress) {
+        log(`server address: ${serverAddress}`);
+        return serverAddress;
+    }
+    else {
+        log("create socket server");
+        return new Promise(async(resolve, reject) => {
+            let io = socket();
+            io.listen(config.port);
+            registerServerMethods(io);
+
+            log("check existing server");
+            let serverAddress = await scanPorts();
+            if (serverAddress) {
+                log("existing server found");
+                if (ip.toLong(localAddress) > ip.toLong(serverAddress)) {
+                    server();
+                    io.close();
+                }
+            } else resolve(localAddress);
+        });
+    }
 };
 
 function registerServerMethods(io) {
@@ -35,7 +46,7 @@ function registerServerMethods(io) {
             socket.emit("download", magnet);
         });
         socket.on("send-clients", () => {
-            let clients = io.sockets.clients();
+            let clients = Object.keys(io.sockets.clients().connected);
             socket.emit("receive-clients", clients);
         });
     });
