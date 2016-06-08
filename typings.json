@@ -1,5 +1,6 @@
 {
   "globalDependencies": {
+    "chance": "registry:dt/chance#0.7.3+20160317120654",
     "debug": "registry:dt/debug#0.0.0+20160317120654",
     "electron": "registry:env/electron#0.37.6+20160416165306",
     "ip": "registry:dt/ip#0.0.0+20160316155526",
