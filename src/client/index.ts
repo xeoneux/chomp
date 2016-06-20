@@ -14,15 +14,10 @@ let socket = io(url);
 let chance = Chance();
 let client = new WebTorrent();
 
-// Client identifiers
-let id = socket.id;
+// Client
 let fName = chance.word({syllables: 2});
 let lName = chance.word({syllables: 2});
 let clientName = fName + lName;
-
-socket.on("hello", (data) => {
-    socket.emit("send-clients", id);
-});
 
 socket.on("download", (magnet) => {
     client.add(magnet, (torrent) => {
@@ -33,14 +28,25 @@ socket.on("download", (magnet) => {
     });
 });
 
-socket.on("receive-clients", (clients) => {
+// Ping
+socket.on("init", () => {
+    let chomp = {};
+    chomp["request"]["id"] = socket.id;
+    chomp["request"]["name"] = clientName;
+    socket.emit("request-clients", chomp);
+});
+
+socket.on("request-ping", (chomp) => {
+    chomp["response"]["id"] = socket.id;
+    chomp["response"]["name"] = clientName;
+    socket.emit("response-ping", chomp);
+});
+
+socket.on("response-clients", (clients) => {
     console.log(clients);
 });
 
-socket.on("get-client", (caller) => {
-    socket.emit("ping-client", {caller, pinger: id});
-});
-
+// File
 dragDrop("body", (files) => {
     client.seed(files, (torrent) => {
         log("upload", torrent.infoHash);

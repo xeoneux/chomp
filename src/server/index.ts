@@ -19,7 +19,7 @@ export default async function server() {
     }
     else {
         log("create socket server");
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let io = socket();
             io.listen(config.port);
             registerServerMethods(io);
@@ -40,16 +40,20 @@ export default async function server() {
 function registerServerMethods(io) {
     let log = debug("chomp:socket");
     io.on("connection", (socket) => {
-        socket.emit("hello", "Hello World!");
+        socket.emit("init");
+
         socket.on("upload", (magnet) => {
             log("broadcast magnet");
             socket.emit("download", magnet);
         });
-        socket.on("send-clients", (id) => {
-            socket.broadcast("get-client", id);
+
+        socket.on("response-clients", (chomp) => {
+            socket.broadcast.emit("request-ping", chomp);
         });
-        socket.on("ping-client", (data) => {
-            io.to(data.caller).emit("receive-clients", data.pinger);
+
+        socket.on("response-ping", (chomp) => {
+            io.to(chomp.request.id)
+                .emit("response-clients", chomp);
         });
     });
 }
