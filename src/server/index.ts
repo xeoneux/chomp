@@ -45,9 +45,11 @@ function registerServerMethods(io) {
             log("broadcast magnet");
             socket.emit("download", magnet);
         });
-        socket.on("send-clients", () => {
-            let clients = Object.keys(io.sockets.clients().connected);
-            socket.emit("receive-clients", clients);
+        socket.on("send-clients", (id) => {
+            socket.broadcast("get-client", id);
+        });
+        socket.on("ping-client", (data) => {
+            io.to(data.caller).emit("receive-clients", data.pinger);
         });
     });
 }

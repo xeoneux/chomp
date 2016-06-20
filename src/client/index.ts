@@ -10,7 +10,9 @@ let log = debug("chomp:client");
 let url = ipcRenderer.sendSync("url");
 log(`websocket url: ${url}`);
 
+let socket = io(url);
 let chance = Chance();
+let client = new WebTorrent();
 
 // Client identifiers
 let id = socket.id;
@@ -18,11 +20,8 @@ let fName = chance.word({syllables: 2});
 let lName = chance.word({syllables: 2});
 let clientName = fName + lName;
 
-let socket = io(url);
-let client = new WebTorrent();
-
 socket.on("hello", (data) => {
-    socket.emit("send-clients");
+    socket.emit("send-clients", id);
 });
 
 socket.on("download", (magnet) => {
@@ -36,6 +35,10 @@ socket.on("download", (magnet) => {
 
 socket.on("receive-clients", (clients) => {
     console.log(clients);
+});
+
+socket.on("get-client", (caller) => {
+    socket.emit("ping-client", {caller, pinger: id});
 });
 
 dragDrop("body", (files) => {
