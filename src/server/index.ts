@@ -54,7 +54,7 @@ function registerServerMethods(io) {
 
         socket.on("response-ping", (chomp) => {
             log(`response client: ${chomp.responseName}`);
-            io.to(chomp.requestId)
+            io.sockets.connected[`/#${chomp.requestId}`]
                 .emit("response-clients", chomp);
         });
     });
