@@ -47,12 +47,14 @@ function registerServerMethods(io) {
             socket.emit("download", magnet);
         });
 
-        socket.on("response-clients", (chomp) => {
+        socket.on("request-clients", (chomp) => {
+            log(`request client: ${chomp.requestName}`);
             socket.broadcast.emit("request-ping", chomp);
         });
 
         socket.on("response-ping", (chomp) => {
-            io.to(chomp.request.id)
+            log(`response client: ${chomp.responseName}`);
+            io.to(chomp.requestId)
                 .emit("response-clients", chomp);
         });
     });

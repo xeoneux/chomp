@@ -17,7 +17,7 @@ let client = new WebTorrent();
 // Client
 let fName = chance.word({syllables: 2});
 let lName = chance.word({syllables: 2});
-let clientName = fName + lName;
+let clientName = `${fName} ${lName}`;
 
 socket.on("download", (magnet) => {
     client.add(magnet, (torrent) => {
@@ -31,14 +31,14 @@ socket.on("download", (magnet) => {
 // Ping
 socket.on("init", () => {
     let chomp = {};
-    chomp["request"]["id"] = socket.id;
-    chomp["request"]["name"] = clientName;
+    chomp["requestId"] = socket.id;
+    chomp["requestName"] = clientName;
     socket.emit("request-clients", chomp);
 });
 
 socket.on("request-ping", (chomp) => {
-    chomp["response"]["id"] = socket.id;
-    chomp["response"]["name"] = clientName;
+    chomp["responseId"] = socket.id;
+    chomp["responseName"] = clientName;
     socket.emit("response-ping", chomp);
 });
 
