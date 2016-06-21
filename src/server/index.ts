@@ -43,8 +43,8 @@ function registerServerMethods(io) {
         socket.emit("init");
 
         socket.on("upload", (magnet) => {
-            log("broadcast magnet");
-            socket.emit("download", magnet);
+            log(`broadcast magnet: ${magnet}`);
+            socket.broadcast.emit("download", magnet);
         });
 
         socket.on("request-clients", (chomp) => {

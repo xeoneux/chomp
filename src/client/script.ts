@@ -21,8 +21,9 @@ let clientName = `${fName} ${lName}`;
 document.getElementById("name").innerText = clientName
 
 socket.on("download", (magnet) => {
+    log(`magnet: ${magnet}`);
     client.add(magnet, (torrent) => {
-        log("download", torrent.infoHash);
+        log(`torrent: ${torrent.infoHash}`);
         torrent.files.forEach((file) => {
             file.appendTo("body");
         });
