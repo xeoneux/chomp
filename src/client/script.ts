@@ -18,6 +18,7 @@ let client = new WebTorrent();
 let fName = chance.word({syllables: 2});
 let lName = chance.word({syllables: 2});
 let clientName = `${fName} ${lName}`;
+document.getElementById("name").innerText = clientName
 
 socket.on("download", (magnet) => {
     client.add(magnet, (torrent) => {
